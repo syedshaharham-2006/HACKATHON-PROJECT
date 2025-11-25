@@ -1,0 +1,30 @@
+RUN THESE COMMANDS IN YOUR EC2 INSTANCE
+
+sudo yum update -y
+sudo yum install python3 python3-pip zip -y
+
+python3 --version
+pip3 --version
+
+
+mkdir lambda-layer
+cd lambda-layer
+mkdir python
+
+
+pip3 install requests -t python/
+pip3 install beautifulsoup4 -t python/
+pip3 install lxml -t python/
+pip3 install boto3 -t python/
+
+
+zip -r9 lambda-layer.zip python
+
+aws configure
+#Pass your credentials
+
+aws lambda publish-layer-version \
+  --layer-name web-scraper-layer \
+  --description "Layer for requests + BeautifulSoup + lxml + boto3 " \
+  --zip-file fileb://lambda-layer.zip \
+  --compatible-runtimes python3.9 python3.10 python3.11

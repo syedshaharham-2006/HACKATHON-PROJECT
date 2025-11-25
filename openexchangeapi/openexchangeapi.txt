@@ -1,0 +1,38 @@
+AWS Lambda Layer Creation for OpenExchangerateapi
+This guide demonstrates how to create an AWS Lambda Layer that includes the pymssql and requests Python libraries for use in AWS Lambda functions.
+
+Steps to Create the Lambda Layer
+✅ Step 1: Create Folder Structure
+First, create the necessary folder structure for the Lambda layer:
+
+mkdir lambda_layer  
+mkdir lambda_layer/python  
+
+
+✅ Step 2: Install Dependencies into the Layer
+Next, install the required dependencies (pymssql and requests) into the lambda_layer/python directory:
+
+pip install pymssql -t lambda_layer/python  
+pip install requests -t lambda_layer/python  
+
+✅ Step 3: Zip the Layer
+Once the dependencies are installed, zip the contents of the lambda_layer directory to create the Lambda layer package:
+
+cd lambda_layer  
+zip -r ../pymssql_layer.zip .  
+cd ..  
+
+This will create a file named pymssql_layer.zip.
+
+✅ Step 4: Publish the Layer
+Publish the layer to AWS Lambda using the AWS CLI:
+
+aws lambda publish-layer-version \
+  --layer-name pymssql-layer \
+  --zip-file fileb://pymssql_layer.zip \
+  --compatible-runtimes python3.9 \
+  --region us-east-1  
+
+This will output something like:
+
+"LayerVersionArn": "arn:aws:lambda:us-east-1:ACCOUNT_ID:layer:pymssql-layer:1"
